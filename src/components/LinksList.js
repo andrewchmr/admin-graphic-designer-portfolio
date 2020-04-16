@@ -1,11 +1,24 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Link} from 'react-router-dom'
+import {useHttp} from "../hooks/http.hook";
+import {AuthContext} from "../context/AuthContext";
 
 
-export const LinksList = ({links}) => {
+export const LinksList = ({links, fetch}) => {
+    const {loading, request} = useHttp();
+    const auth = useContext(AuthContext);
+
     if (!links.length) {
         return <p className="center">Ссылок пока нет</p>
     }
+
+    const deleteWork = async (id) => {
+        await request(`/api/works/${id}`, 'DELETE', null, {
+            Authorization: `Bearer ${auth.token}`,
+            'Content-Type': 'application/json'
+        });
+        fetch();
+    };
 
     return (
         <table>
@@ -30,7 +43,7 @@ export const LinksList = ({links}) => {
                         <td><Link to={`/work/${link._id}`}>
                             <button className='btn' style={{marginRight: '10px'}}>Редактировать</button>
                         </Link>
-                            <button className='btn'>Удалить</button>
+                            <button onClick={() => deleteWork(link._id)} className='btn'>Удалить</button>
                         </td>
                     </tr>
                 )

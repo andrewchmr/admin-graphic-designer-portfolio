@@ -7,16 +7,13 @@ import {LinksList} from '../components/LinksList'
 export const LinksPage = () => {
   const [links, setLinks] = useState([])
   const {loading, request} = useHttp()
-  const {token} = useContext(AuthContext)
 
   const fetchLinks = useCallback(async () => {
     try {
-      const fetched = await request('/api/works', 'GET', null, {
-        Authorization: `Bearer ${token}`
-      })
-      setLinks(fetched)
+      const fetched = await request('/api/works');
+      setLinks(fetched);
     } catch (e) {}
-  }, [token, request]);
+  }, [request]);
 
   useEffect(() => {
     fetchLinks()
@@ -28,7 +25,7 @@ export const LinksPage = () => {
 
   return (
     <>
-      {!loading && <LinksList links={links} />}
+      {!loading && <LinksList links={links} fetch={fetchLinks} />}
     </>
   )
 };

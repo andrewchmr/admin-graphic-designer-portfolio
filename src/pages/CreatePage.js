@@ -18,7 +18,7 @@ export const CreatePage = () => {
         formData.append('category', category);
         formData.append('image', image);
         formData.append('thumbnail', thumbnail);
-        await request('/api/create', 'POST', formData, {
+        await request('/api/works', 'POST', formData, {
             Authorization: `Bearer ${auth.token}`,
         });
         history.push(`/works`)
